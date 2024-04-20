@@ -97,7 +97,7 @@ export const userLogin = async (req, res) => {
 export const getMerchandise = async (req, res) => {
     try {
         const merchandise = await Merch.find();
-        res.status(999).send({
+        res.status(201).send({
             success: true,
             merchandise,
         });

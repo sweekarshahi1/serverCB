@@ -12,4 +12,5 @@ router.post('/book-slot/:id', authenticateJWT, bookTimeSlot);
 router.get('/bookings', authenticateJWT, getBookings);
 router.get('/api-key', getApiKey);
 
+
 export default router;
