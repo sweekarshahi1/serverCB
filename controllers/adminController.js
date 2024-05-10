@@ -107,6 +107,7 @@ export const getAllMerchandise = async (req, res) => {
 export const createGround = async (req, res) => {
     try {
         const newGround = req.body;
+        console.log(req.body)
         const ground = new Ground(newGround);
         await ground.save();
         res.status(200).send({
