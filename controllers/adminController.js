@@ -108,8 +108,14 @@ export const createGround = async (req, res) => {
     try {
         const newGround = req.body;
         console.log(req.body)
+        const convertedLatitude = parseFloat(newGround.coordinates.latitude)
+        const convertedLongitude = parseFloat(newGround.coordinates.longitude)
+        newGround.coordinates.latitude = convertedLatitude
+        newGround.coordinates.longitude = convertedLongitude
+        console.log(newGround)
         const ground = new Ground(newGround);
-        await ground.save();
+        await ground.save()
+
         res.status(200).send({
             message: "Ground creation successful",
             success: true,
@@ -126,6 +132,23 @@ export const createGround = async (req, res) => {
     }
 }
 
+//Merch display
+export const getMerchandise = async (req, res) => {
+    try {
+        const merchandise = await Merch.find();
+        res.status(201).send({
+            success: true,
+            merchandise,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(400).send({
+            message: "Failed to fetch merchandise",
+            success: false,
+            error,
+        });
+    }
+}
 
 //*************** get all ground details ***************//
 export const getAllGrounds = async (req, res) => {

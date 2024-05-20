@@ -26,10 +26,7 @@ app.post('/api/v1/merch/create', createMerchandiseRoute);
 app.use('/api/v1/get-all-merch', getAllMerch);
 app.use('/api/v1/get-merch-id/:id',getMerchbyId)
 
-
 app.use('/uploads', express.static('uploads'));
-
-
 const PORT = process.env.PORT || 8080;
 
 //listen 

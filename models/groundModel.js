@@ -27,11 +27,11 @@ const groundSchema = new mongoose.Schema({
     },
     // coordinates: {
     //     latitude: {
-    //         type: String,
+    //         type: Number,
     //         required: [true, "required"],
     //     },
     //     longitude: {
-    //         type: String,
+    //         type: Number,
     //         required: [true, "required"],
     //     },
     // },
