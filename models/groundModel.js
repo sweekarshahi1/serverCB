@@ -25,6 +25,24 @@ const groundSchema = new mongoose.Schema({
     shift:{
         type: String,
     },
+    vendorId:{
+        type: String,
+    },
+    reviews:[
+        {
+            user:{
+                type:Object,
+            },
+            comment:{
+                type:String,
+                required:true,
+            },
+            createdAt:{
+                type:Date,
+                default:Date.now(),
+            },
+        }
+    ],
     // coordinates: {
     //     latitude: {
     //         type: Number,

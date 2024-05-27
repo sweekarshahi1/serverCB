@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Booking } from "../models/bookingModel.js";
 import { Merch } from '../models/merchModel.js';
+import { User } from "../models/userModel.js";
+import { Order } from "../models/orderModel.js";
 // import catchAsyncErros from "../middleware/catchAsyncErros.js";
 
 //*************** admin registration ***************//
@@ -108,10 +110,10 @@ export const createGround = async (req, res) => {
     try {
         const newGround = req.body;
         console.log(req.body)
-        const convertedLatitude = parseFloat(newGround.coordinates.latitude)
-        const convertedLongitude = parseFloat(newGround.coordinates.longitude)
-        newGround.coordinates.latitude = convertedLatitude
-        newGround.coordinates.longitude = convertedLongitude
+        // const convertedLatitude = parseFloat(newGround.coordinates.latitude)
+        // const convertedLongitude = parseFloat(newGround.coordinates.longitude)
+        // newGround.coordinates.latitude = convertedLatitude
+        // newGround.coordinates.longitude = convertedLongitude
         console.log(newGround)
         const ground = new Ground(newGround);
         await ground.save()
@@ -167,6 +169,67 @@ export const getAllGrounds = async (req, res) => {
         });
     }
 }
+
+export const getAllOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({});
+        res.status(200).send({
+            success: true,
+            orders,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
+            message: "No Orders found",
+            success: false,
+            error,
+        });
+    }
+}
+
+
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.status(200).send({
+            success: true,
+            users,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
+            message: ("No Error->",error),
+            success: false,
+            error,
+        });
+    }
+}
+
+//Get grounds by Vendors
+export const getGroundByVendor = async (req, res) => {
+    try {
+        const vendorId = req.params.id
+        console.log(vendorId)
+        const ground = await Ground.find({
+            "vendorId": vendorId,
+          });
+        res.status(201).send({
+            success: true,
+            ground,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
+            message: "ground not found",
+            success: false,
+            error,
+        });
+    }
+}
+
+
+
 //*************** fetch ground by id ***************//
 export const fetchGroundById = async (req, res) => {
     try {
@@ -241,6 +304,31 @@ export const deleteGround = async (req, res) => {
     }
 }
 
+export const deleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findByIdAndDelete(userId);
+        if (!user) {
+            return res.status(400).send({
+                message: "User not found",
+                success: false,
+            });
+        }
+        res.status(200).send({
+            message: "User deleted",
+            success: true,
+            user,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
+            message: "Error deleting user",
+            success: false,
+            error,
+        });
+    }
+}
+
 //*************** get all bookings ***************//
 export const getBookings = async (req, res) => {
     try {
@@ -259,4 +347,22 @@ export const getBookings = async (req, res) => {
     }
 }
 
+//*************** fetch ground by id ***************//
+export const fetchGroundFeedbacks = async (req, res) => {
+    try {
+        const groundId = req.params.id;
+        const ground = await Ground.findById(groundId);
+        res.status(201).send({
+            success: true,
+            ground,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
+            message: "ground not found",
+            success: false,
+            error,
+        });
+    }
+}
 

@@ -13,6 +13,10 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Password is required']
     },
+    role: {
+        type: String,
+        default:"Vendor"
+    },
 });
 
 export const Admin = mongoose.model('Admin', adminSchema);

@@ -19,6 +19,10 @@ export const bookingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    PaymentType: {
+        type:String,
+        default: "Cash Payment"
+    },
     // date: {
     //     type: Date,
     //     required: true

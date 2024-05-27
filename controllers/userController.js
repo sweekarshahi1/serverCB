@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { Ground } from "../models/groundModel.js";
 import { Booking } from "../models/bookingModel.js";
 import { Merch } from '../models/merchModel.js';
+import {Order} from "../models/orderModel.js"
 
 //*************** user registration ***************//
 
@@ -38,6 +39,7 @@ export const userSignup = async (req, res) => {
             success: true,
             user,
             token,
+
         })
     } catch (error) {
         console.log(error);
@@ -285,3 +287,71 @@ export const getApiKey = async (req, res) => {
         });
     }
 }
+
+//Get Order by user
+export const getOrderbyUser = async (req, res) => {
+    try {
+        const userId = req.params.id
+        console.log(userId)
+        const orders = await Order.find({
+            "user.userId": userId,
+          });
+        res.status(201).send({
+            success: true,
+            orders,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({
+            message: "Orders not found",
+            success: false,
+            error,
+        });
+    }
+}
+
+//Create Review
+export const createReview = async (req, res) => {
+    try {
+        const { user, comment, groundId } = req.body;
+        const ground = await Ground.findById(groundId);
+
+        console.log(req.body);
+        if (!ground) {
+            return res.status(404).json({
+                success: false,
+                message: "Ground not found",
+            });
+        }
+
+        // Construct the review object
+        const review = {
+            user, 
+            comment,
+        };
+
+        // Add the review to the feedbacks array
+        ground.reviews.push(review);
+
+        // Save the ground document to update the feedbacks array
+        await ground.save();
+
+        // console.log(review)
+
+        res.status(201).json({
+            success: true,
+            message: "Review added",
+            review: review, // Optionally, you can send back the added review object
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message,
+        });
+    }
+};
+
+
+
